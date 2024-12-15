@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance List</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: #333;
+        }
+
+        /* Header styles */
+        header {
+            background: #004d7a;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 5px solid #ffd700;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* Main container styles */
+        main {
+            margin: 30px auto;
+            max-width: 900px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-display {
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background: #004d7a;
+            color: #fff;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            background: #f9f9f9;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        tr:nth-child(even) td {
+            background: #f1f1f1;
+        }
+
+        tr:hover td {
+            background: #ffeaa7;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        footer a {
+            color: #004d7a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Attendance List</h1>
+    </header>
+    <main>
+        <div class="date-display" id="date-display"></div>
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Roll No.</th>
+                    <th>Remarks</th>
+                    <th>Log In Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        Powered by Local API
+    </footer>
+
+    <script>
+        // const apiBaseUrl = "http://127.0.0.1:5000"; // Base URL for Flask API
+
+        async function fetchData() {
+            try {
+                const response = await fetch(`/book`);
+                const data = await response.json();
+
+                const dateDisplay = document.getElementById("date-display");
+                const tableBody = document.querySelector("#data-table tbody");
+
+                tableBody.innerHTML = ""; // Clear table before rendering
+
+                let latestDate = "";
+
+                data.forEach(row => {
+                    const tr = document.createElement("tr");
+
+                    // Create table row
+                    ["NAME", "ROLL NO.", "REMARKS", "LOG IN TIME"].forEach(key => {
+                        const td = document.createElement("td");
+                        td.textContent = row[key] || "N/A";
+                        tr.appendChild(td);
+                    });
+
+                    tableBody.appendChild(tr);
+
+                    // Keep track of the latest date
+                    if (row.DATE && (!latestDate || new Date(row.DATE) > new Date(latestDate))) {
+                        latestDate = row.DATE;
+                    }
+                });
+
+                dateDisplay.textContent = `Date: ${latestDate || "No data available"}`;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        // Fetch and display data when the page loads
+        fetchData();
+    </script>
+</body>
+</html>
