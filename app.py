@@ -20,6 +20,7 @@ def register():
     data = load_data()
     return jsonify(data), 200
 
+#EndSession
 @app.route('/reset', methods=['GET'])
 def reset():
     data = load_data()
@@ -30,6 +31,7 @@ def reset():
     save_data(data)
     return jsonify({"message": "All values reset successfully."}), 200
 
+#Process
 @app.route('/attendance', methods=['GET'])
 def handle():
     data=load_data()
@@ -58,6 +60,7 @@ def handle():
     save_data(data)
     return jsonify({"message": "Marked"}), 200
 
+#midwork
 @app.route('/markabsent', methods=['GET'])
 def mark_absent():
     data = load_data()
