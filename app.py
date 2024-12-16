@@ -70,5 +70,21 @@ def handle():
     save_data(data)
     return jsonify({"message": "Marked"}), 200
 
+@app.route('/markabsent', methods=['GET'])
+def mark_absent():
+    data = load_data()
+    current_time = datetime.now().strftime("%H:%M")
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
+    for entry in data:
+        if not entry.get("REMARKS"):
+            entry["REMARKS"] = "Absent"
+            entry["LOG IN TIME"] = current_time
+            entry["DATE"] = current_date
+
+    save_data(data)
+    return jsonify({"message": "Access time ended"}), 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=80)
+    
