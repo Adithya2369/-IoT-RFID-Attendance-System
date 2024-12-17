@@ -48,6 +48,8 @@ def handle():
 
     if user["UID"] != uid:
         user["REMARKS"] = "tampered"
+        user["LOG IN TIME"] = datetime.now().strftime("%H:%M")
+        user["DATE"] = datetime.now().strftime("%Y-%m-%d")
         with open('data.json', 'w') as file:
             json.dump(data, file, indent=2)
         return jsonify({"message": "ID not matched"}), 403
